@@ -13,7 +13,13 @@ studyforrest
 
 # Description
 
-This dataset contains versatile brain imaging data for natural auditory stimulation and real­life cognition. It includes high­-resolution functional magnetic resonance (fMRI) data from 20 participants recorded at high field strength (7 Tesla) during prolonged stimulation with an auditory feature film ('Forrest Gump'). In addition, a comprehensive set of auxiliary data (T1w, T2w, DTI, susceptibility-weighted image, angiography) as well as measurements to assess technical and physiological noise components have been acquired.
+This dataset contains versatile brain imaging data for natural auditory
+stimulation and real­-life cognition. It includes high­-resolution functional
+magnetic resonance (fMRI) data from 20 participants recorded at high field
+strength (7 Tesla) during prolonged stimulation with an auditory feature film
+('Forrest Gump'). In addition, a comprehensive set of auxiliary data (T1w,
+T2w, DTI, susceptibility-weighted image, angiography) as well as measurements
+to assess technical and physiological noise components have been acquired.
 
 Participants were also scanned with a musical genre stimulation paradigm...
 
@@ -30,7 +36,9 @@ PDDL
 
 # How to Acknowledge
 
-Please follow good scientific practice by citing the most appropriate publication(s) describing the aspects of this datasets that were used in a study.
+Please follow good scientific practice by citing the most appropriate
+publication(s) describing the aspects of this datasets that were used in a
+study.
 
 # Version History
 
@@ -42,11 +50,11 @@ Please follow good scientific practice by citing the most appropriate publicatio
 
 * Physiological data fixes and additions (Feb 20 2014)
 * physiological data for all participants in original sampling rate
-(physio_pristine.txt.gz) was added
+  (physio_pristine.txt.gz) was added
 * physiological data for sub008 run005 was updated to strip leading data
-samples prior to the fixes MR
+  samples prior to the fixes MR
 * trigger signal. Thanks to Christine Guo for the report
 * trigger log for first MR trigger (only) was offset by one data sample
-(5­ - 10ms)
+  (5­ - 10ms)
 
 ```
