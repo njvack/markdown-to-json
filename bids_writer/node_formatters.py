@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from nest import TextNode, ElementNode
 import sys
@@ -10,7 +11,7 @@ logging.basicConfig(
     level=logging.DEBUG,
     format='%(message)s',
     stream=sys.stderr)
-logger = logging.getLogger('formatters')
+logger = logging.getLogger('node_formatters')
 
 
 class SimpleFormatter(object):
