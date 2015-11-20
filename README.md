@@ -9,19 +9,14 @@ This tool provides a way to a convert a subset of HTML into JSON, such that it's
 ```
 # Name
 
-studyforrest
+Test Study
 
 # Description
 
-This dataset contains versatile brain imaging data for natural auditory
-stimulation and real­-life cognition. It includes high­-resolution functional
-magnetic resonance (fMRI) data from 20 participants recorded at high field
-strength (7 Tesla) during prolonged stimulation with an auditory feature film
-('Forrest Gump'). In addition, a comprehensive set of auxiliary data (T1w,
-T2w, DTI, susceptibility-weighted image, angiography) as well as measurements
-to assess technical and physiological noise components have been acquired.
+This dataset contains structural, functional, and diffusion-weighted images
+for a large population of people. There are a lot of files here.
 
-Participants were also scanned with a musical genre stimulation paradigm...
+During the functional scan, participants performed a numeric 4-back task.
 
 # License
 
@@ -29,9 +24,8 @@ PDDL
 
 # Authors
 
-* Michael Hanke
-* Florian J. Baumgartner
-* Pierre Ibe
+* Nathan J. Vack
+* Tim Berners-Lee
 * ...
 
 # How to Acknowledge
@@ -44,17 +38,39 @@ study.
 
 ## 1
 
-* Initial Release (22 Jan 2014)
+Initial Release (2014-11-20)
 
 ## 2
 
-* Physiological data fixes and additions (Feb 20 2014)
-* physiological data for all participants in original sampling rate
-  (physio_pristine.txt.gz) was added
-* physiological data for sub008 run005 was updated to strip leading data
-  samples prior to the fixes MR
-* trigger signal. Thanks to Christine Guo for the report
-* trigger log for first MR trigger (only) was offset by one data sample
-  (5­ - 10ms)
+* Imaging additions (2014-12-06)
+* Added T1-weighted structural images for new participants
+* Added fMRI images for new
+  participants
+* Updated study description
 
+```
+
+should translate to:
+
+```
+{
+    "Name": "Test Study",
+    "Description": "This dataset contains structural, functional, and diffusion-weighted images for a large population of people. There are a lot of files here.\n\nDuring the functional scan, participants performed a numeric 4-back task.",
+    "License": "PDDL",
+    "Authors": [
+        "Nathan J. Vack",
+        "Tim Berners-Lee",
+        "..."
+    ],
+    "HowToAcknowledge": "Please follow good scientific practice by citing the most appropriate publication(s) describing the aspects of this datasets that were used in a study.",
+    "VersionHistory": {
+        "1": "Initial Release (2014-11-20)",
+        "2": [
+            "Imaging additions (2014-12-06)",
+            "Added T1-weighted structural imag",
+            "Added fMRI images for new participants",
+            "Updated study description"
+        ]
+    }
+}
 ```
