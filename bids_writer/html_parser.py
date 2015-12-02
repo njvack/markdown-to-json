@@ -16,6 +16,10 @@ class HTMLNode(object):
     def __init__(self):
         self.children = []
 
+    @property
+    def is_heading(self):
+        return False
+
 
 class TextNode(HTMLNode):
     def __init__(self, data):
@@ -35,6 +39,10 @@ class ElementNode(HTMLNode):
 
     def add_data(self, data):
         pass
+
+    @property
+    def is_list(self):
+        return self.tag in self.LIST_TAGS
 
     def is_void(self):
         return self.tag in self.VOID_ELEMENTS
@@ -62,6 +70,10 @@ class ElementNode(HTMLNode):
         return "<{0}{1}>{2}</{0}>".format(
             self.tag, self.render_attrs(),
             "\n".join(str(c) for c in self.children))
+
+    HEADING_TAGS = {'h1', 'h2', 'h3', 'h4', 'h5', 'h6'}
+
+    LIST_TAGS = {'ol', 'ul'}
 
     VOID_ELEMENTS = set([
         'area',

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from nest import TextNode, ElementNode
+from .html_parser import TextNode, ElementNode
 import sys
 import string
 import re
@@ -62,13 +62,10 @@ class SimpleFormatter(object):
             node.attr_dict['href'])
 
     def _format_block_element(self, node):
-        return self._format_inline_element(node) + "\n"
-
-    def _format_li_element(self, node):
-        return "* " + self._format_block_element(node)
+        return self._format_inline_element(node)
 
     def _format_p_element(self, node):
-        return self._format_block_element(node) + "\n"
+        return self._format_block_element(node)
 
     TYPE_FORMATTERS = {
         TextNode: _format_text_node,
@@ -83,9 +80,9 @@ class SimpleFormatter(object):
     }
 
 
-class HeaderKeyFormatter(SimpleFormatter):
+class JSONPrepFormatter(SimpleFormatter):
     def __init__(self):
-        super(HeaderKeyFormatter, self).__init__()
+        super(JSONPrepFormatter, self).__init__()
 
     WS = re.compile('\s+')
 
@@ -100,3 +97,9 @@ class HeaderKeyFormatter(SimpleFormatter):
     _format_h4_element = _format_heading_as_key
     _format_h5_element = _format_heading_as_key
     _format_h6_element = _format_heading_as_key
+
+    def _format_list_as_array(self, node):
+        return [self.format(c) for c in node.children]
+
+    _format_ol_element = _format_list_as_array
+    _format_ul_element = _format_list_as_array
