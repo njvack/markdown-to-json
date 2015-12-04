@@ -1,76 +1,48 @@
-# HTML/Markdown to Brain Imaging Data Structure (BIDS) JSON converter
+# Markdown to JSON converter
 
-Hand-writing JSON is a pain in the ass. Unfortunately, the [Brain Imaging Data Structure](http://bids.neuroimaging.io/) specifies the main experiment description be written in JSON.
+## Description
 
-This tool provides a way to a convert a subset of HTML into JSON, such that it's easy to write the description file in markdown, convert it to HTML, and output BIDS-compliant JSON. The converter uses headings as JSON keys, and nests following content. Lists are supported and converted to arrays.
+A simple tool to convert Markdown (technically CommonMark) data into JSON. It uses headings as JSON keys, and the stuff following headings as values. Lists are turned into arrays. Higher heading values yield nested JSON keys.
 
 ## Example:
 
+The markdown:
+
 ```
-# Name
-
-Test Study
-
 # Description
 
-This dataset contains structural, functional, and diffusion-weighted images
-for a large population of people. There are a lot of files here.
-
-During the functional scan, participants performed a numeric 4-back task.
-
-# License
-
-PDDL
+This is an example file
 
 # Authors
 
-* Nathan J. Vack
-* Tim Berners-Lee
-* ...
+* Nate Vack
+* Someone Else
 
-# How to Acknowledge
+# Versions
 
-Please follow good scientific practice by citing the most appropriate
-publication(s) describing the aspects of this datasets that were used in a
-study.
+## Version 1
 
-# Version History
+Here's something about Version 1
 
-## 1
+## Version 2
 
-Initial Release (2014-11-20)
-
-## 2
-
-* Imaging additions (2014-12-06)
-* Added T1-weighted structural images for new participants
-* Added fMRI images for new
-  participants
-* Updated study description
-
+Here's something about Version 2
 ```
 
-should translate to:
+will translate to the JSON:
 
 ```
-{
-    "Name": "Test Study",
-    "Description": "This dataset contains structural, functional, and diffusion-weighted images for a large population of people. There are a lot of files here.\n\nDuring the functional scan, participants performed a numeric 4-back task.",
-    "License": "PDDL",
-    "Authors": [
-        "Nathan J. Vack",
-        "Tim Berners-Lee",
-        "..."
-    ],
-    "HowToAcknowledge": "Please follow good scientific practice by citing the most appropriate publication(s) describing the aspects of this datasets that were used in a study.",
-    "VersionHistory": {
-        "1": "Initial Release (2014-11-20)",
-        "2": [
-            "Imaging additions (2014-12-06)",
-            "Added T1-weighted structural imag",
-            "Added fMRI images for new participants",
-            "Updated study description"
-        ]
-    }
+  "Description": "This is an example file",
+  "Authors": ["Nate Vack", "Someone Else"],
+  "Versions": {
+    "Version 1": "Here's something about Version 1",
+    "Version 2": "Here's something about Version 2"
+  }
 }
 ```
+
+## Why the hell would I want to do this?
+
+Sometimes, you need to write JSON. Writing it by hand is a pain. It's a fiddly format and there are strings to escape and commas and it looks bad and you'll have validation errors and . You could build a custom tool to write your particular JSON, but that's a bunch of work. You could find some JSON-specific editor, but they have their own set of workflow problems. Sometimes, you maybe just want to open a text editor and pump out a little nested data structure in a human-readable way.
+
+This lets you do that. Markdown is easy.
