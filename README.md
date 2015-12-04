@@ -32,6 +32,7 @@ Here's something about Version 2
 will translate to the JSON:
 
 ```
+{
   "Description": "This is an example file",
   "Authors": ["Nate Vack", "Someone Else"],
   "Versions": {
