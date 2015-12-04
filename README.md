@@ -22,7 +22,7 @@ This is an example file
 
 ## Version 1
 
-Here's something about Version 1
+Here's something about Version 1; I said "Hooray!"
 
 ## Version 2
 
@@ -36,14 +36,13 @@ will translate to the JSON:
   "Description": "This is an example file",
   "Authors": ["Nate Vack", "Someone Else"],
   "Versions": {
-    "Version 1": "Here's something about Version 1",
+    "Version 1": "Here's something about Version 1; I said \"Hooray!\"",
     "Version 2": "Here's something about Version 2"
   }
-}
-```
+}```
 
 ## Why the hell would I want to do this?
 
-Sometimes, you need to write JSON. Writing it by hand is a pain. It's a fiddly format and there are strings to escape and commas and it looks bad and you'll have validation errors and . You could build a custom tool to write your particular JSON, but that's a bunch of work. You could find some JSON-specific editor, but they have their own set of workflow problems. Sometimes, you maybe just want to open a text editor and pump out a little nested data structure in a human-readable way.
+Sometimes, you need to write JSON. Writing it by hand is a pain. It's a fiddly format and there are strings to escape and commas and it looks bad and you'll have validation errors and yuck. You could build a custom tool to write your particular JSON, but that's a bunch of work. You could use some JSON-specific editor, but they tend to be pretty neckbeard. Sometimes, you maybe just want to open a text editor and pump out a little nested data structure in a human-readable way.
 
 This lets you do that. Markdown is easy.
