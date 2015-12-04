@@ -12,11 +12,13 @@ OrderedDict structure. Its rules:
   you'll generally get the markdown.
 * The exception is lists -- they're turned into arrays.
 * Lists must occur alone after a heading.
+* You can nest lists; you'll get nested arrays.
 * To increase key nesting level, use higher-numbered headers. You can't go
   past 6. That would be insane anyhow.
 * You'll want to monotonically increasing heading numbers (eg, a H1 followed
   by a H2) -- if you jump, it's valid but the high-numbered headings won't be
   treated as keys.
+* Content ordering is unchanged.
 
 To use:
 
@@ -31,7 +33,7 @@ Foo bar baz corge
 * List 2
 \"""
 
-ast = CommonMark.parser().parse(md)
+ast = CommonMark.DocParser().parse(md)
 nested = CMarkASTNester().nest(ast)
 
 Note that you'll want to turn the nested structure into a string.
