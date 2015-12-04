@@ -19,7 +19,7 @@ def camelize(s):
 
 def underscore(s):
     # Change "Foo bar baz's" to "foo_bar_bazs"
-    underscored = re.sub(r'\s+', '_', s.strip().downcase())
+    underscored = re.sub(r'\s+', '_', s.strip().lower())
     return re.sub(r'\W', '', underscored)
 
 
