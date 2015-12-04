@@ -2,83 +2,73 @@
 # -*- coding: utf-8 -*-
 
 from collections import OrderedDict
-from .node_formatters import JSONPrepFormatter
 
 """
-This module converts an HTML tree structure into an OrderedDict, from whence
-it can be trivially made into json. You'll usually use it like:
+This module contains a class to change a CommonMark.py AST into a nested
+OrderedDict structure. Its rules:
 
-html = html_text_from_somewhere
-parser = parser.SimplifiedBodyTreeParser()
-parser.feed(html)
-nester = json_writer.TreeNester()
-nested = nester.nest(parser.root)
-json.dumps(nested)
+* Headings are keys. Stuff following headings are values.
+* Values are generally treated as strings, and left unchanged; in other words
+  you'll generally get the markdown.
+* The exception is lists -- they're turned into arrays.
+* Lists must occur alone after a heading.
+* To increase key nesting level, use higher-numbered headers. You can't go
+  past 6. That would be insane anyhow.
+* You'll want to monotonically increasing heading numbers (eg, a H1 followed
+  by a H2) -- if you jump, it's valid but the high-numbered headings won't be
+  treated as keys.
 
-Its rules:
+To use:
 
-* Headings define the nesting level of following content
-* Headings must start with h1
-* The contents of headings are dict keys
-* Following content is the dict value
-* Headings must all be direct children of the parent node
-* Heading level may increment by at most one from the current level -- for
-  example, h1+h1 and h1+h2 are OK, but h1+h3 is not.
-* Heading level may decrement by more than one. So h2+h1 and h3+h1 are OK.
-* Most tags are stripped. <strong>, <em>, and <a> tags may be converted to
-  their markdown equivalents.
+md = \"""
+# First Heading
+
+Foo bar baz corge
+
+# Second Heading
+
+* List 1
+* List 2
+\"""
+
+ast = CommonMark.parser().parse(md)
+nested = CMarkASTNester().nest(ast)
+
+Note that you'll want to turn the nested structure into a string.
 """
 
 
-class TreeNester(object):
-    def __init__(self, formatter_factory=JSONPrepFormatter):
-        self.formatter = formatter_factory()
-        super(TreeNester, self).__init__()
+class CMarkASTNester(object):
+    def __init__(self):
+        super(CMarkASTNester, self).__init__()
 
-    def jsonify(self, root):
-        nested = self.nest(root)
-        return self._jsonify_element_dict(nested)
+    def nest(self, ast):
+        return self._dictify_blocks(ast.children, 1)
 
-    def _jsonify_element_dict(self, element_dict):
-        out = OrderedDict()
-        for elem_key, elem_values in element_dict.items():
-            key = self.formatter.format(elem_key).strip()
-            valueizer = self._valueize_method(elem_values)
-            value = valueizer(elem_values)
-            out[key] = value
-        return out
+    def _dictify_blocks(self, blocks, heading_level):
+        def matches_heading(block):
+            return block.t == 'ATXHeader' and block.level == heading_level
 
-    def _valueize_method(self, value):
-        if hasattr(value, 'items'):
-            return self._jsonify_element_dict
-        if len(value) == 1:
-            first = value[0]
-            if first.is_list:
-                return self._valueize_list
-        return self._valueize_text
+        if not any((matches_heading(b) for b in blocks)):
+            self._ensure_list_singleton(blocks)
+            return blocks
 
-    def _valueize_list(self, l):
-        return [self.formatter.format(v) for v in l]
-
-    def _valueize_text(self, l):
-        return "\n\n".join([self.formatter.format(v) for v in l]).strip()
-
-    def nest(self, root):
-        return self.split_elements(root.children, 1)
-
-    def split_elements(self, element_list, heading_level):
-        def matches_heading(element):
-            return element.tag == "h" + str(heading_level)
-        if not any((matches_heading(item) for item in element_list)):
-            return element_list
-        splitted = dictify_list_by(element_list, matches_heading)
+        splitted = dictify_list_by(blocks, matches_heading)
         for heading, nests in splitted.items():
-            splitted[heading] = self.split_elements(nests, heading_level + 1)
+            splitted[heading] = self._dictify_blocks(nests, heading_level + 1)
         return splitted
 
-    def _ensure_list_singleton(self, element_list):
-        if len(element_list) > 1 and any((e.is_list for e in element_list)):
-            raise ValueError("Can't mix lists and other stuff")
+    def _ensure_list_singleton(self, blocks):
+        lists = [e for e in blocks if e.t == 'List']
+        if len(blocks) > 1 and len(lists) > 0:
+            l = lists[0]
+            raise ContentError(
+                "Error at line {0}: Can't mix lists and other content".format(
+                    l.start_line))
+
+
+class ContentError(ValueError):
+    pass
 
 
 def dictify_list_by(l, fx):
