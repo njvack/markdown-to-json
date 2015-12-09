@@ -10,6 +10,8 @@ Sometimes, you need to write JSON. Writing it by hand is a pain. It's a fiddly f
 
 This lets you do that. Markdown is easy.
 
+As a point of reference, this tool was built to allow easy(-ish) creation of dataset descriptions for the [Brain Imaging Data Structure](http://bids.neuroimaging.io/) data sharing specification.
+
 
 ## Example:
 
