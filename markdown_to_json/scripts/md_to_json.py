@@ -24,8 +24,7 @@ import markdown_to_json
 from markdown_to_json.vendor.docopt import docopt
 from markdown_to_json.vendor import CommonMark
 
-from markdown_to_json.dict_renderer import Renderer
-from markdown_to_json.json_writer import CMarkASTNester
+from markdown_to_json.markdown_to_json import Renderer, CMarkASTNester
 
 import logging
 logging.basicConfig(
