@@ -1,37 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
 
-
-from collections import OrderedDict
+from .vendor.ordereddict import OrderedDict
 import string
 import re
 
 
-def I(s):
-    # Return s unchanged
-    return s
-
-
-def camelize(s):
-    # Change "Foo bar baz's" to "FooBarBazs"
-    return re.sub(r'\W', '', string.capwords(s))
-
-
-def underscore(s):
-    # Change "Foo bar baz's" to "foo_bar_bazs"
-    underscored = re.sub(r'\s+', '_', s.strip().lower())
-    return re.sub(r'\W', '', underscored)
-
-
 class Renderer(object):
-    def __init__(self, key_formatter=I):
-        self.key_formatter = key_formatter
+    def __init__(self):
         super(Renderer, self).__init__()
 
     def stringify_dict(self, d):
         out = OrderedDict(
             [
-                (self.key_formatter(self._render_block(k)), self._valuify(v))
+                (self._render_block(k), self._valuify(v))
                 for k, v in d.items()
             ])
         return out

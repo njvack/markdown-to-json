@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals, absolute_import
 
-from collections import OrderedDict
+from .vendor.ordereddict import OrderedDict
 
 """
 This module contains a class to change a CommonMark.py AST into a nested
