@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
 
+from functools import reduce
+import operator
 from .vendor.ordereddict import OrderedDict
 
 
@@ -41,7 +43,10 @@ class Renderer(object):
             return [self._render_block(b) for b in block.children]
 
     def _render_List(self, block):
-        return [self._render_block(li) for li in block.children]
+        # We need to de-nest this one level -- we'll use the trick that
+        # lists can be added to do this.
+        list_items = [self._render_block(li) for li in block.children]
+        return reduce(operator.add, list_items)
 
     def _render_FencedCode(self, block):
         return "```\n" + block.string_content + "```"
