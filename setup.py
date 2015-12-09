@@ -28,10 +28,10 @@ def get_locals(filename):
     execfile(filename, {}, l)
     return l
 
-metadata = get_locals(os.path.join('bids_writer', '_metadata.py'))
+metadata = get_locals(os.path.join('markdown_to_json', '_metadata.py'))
 
 setup(
-    name="bids-json-writer",
+    name="markdown-to-json",
     version=metadata['version'],
     author=metadata['author'],
     author_email=metadata['author_email'],
@@ -41,5 +41,6 @@ setup(
     cmdclass={'test': PyTest},
     entry_points={
         'console_scripts': [
+            'md_to_json = markdown_to_json.scripts.md_to_json:main'
         ]}
     )
