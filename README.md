@@ -28,6 +28,8 @@ cd markdown_to_json
 ./setup.py install
 ```
 
+The package has no external requirements and has been tested on python 2.6.6 through 3.4.3.
+
 You'll get one executable:
 
 ## `md_to_json`
