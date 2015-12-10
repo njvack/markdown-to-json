@@ -12,8 +12,44 @@ This lets you do that. Markdown is easy.
 
 As a point of reference, this tool was built to allow easy(-ish) creation of dataset descriptions for the [Brain Imaging Data Structure](http://bids.neuroimaging.io/) data sharing specification.
 
+## Installation
 
-## Example:
+Easy method:
+
+```
+pip install markdown-to-json
+```
+
+Also easy method:
+
+```
+git clone https://github.com/njvack/markdown-to-json.git
+cd markdown_to_json
+./setup.py install
+```
+
+You'll get one executable:
+
+## `md_to_json`
+
+```
+Translate markdown into JSON.
+
+Usage:
+  md_to_json [options] <markdown_file>
+  md_to_json -h | --help
+
+Options:
+  -h --help     Show this screen
+  --version     Print version number
+  -o <file>     Save output to a file instead of stdout
+  -i <val>      Indent nested JSON by this amount. Use a negative number for
+                most compact possible JSON. the [default: 2]
+```
+
+This translates a markdown document into JSON as described in the example below.
+
+## Example
 
 The markdown:
 
@@ -52,25 +88,6 @@ will translate to the JSON:
   }
 }
 ```
-
-## `md_to_json`
-
-```
-Translate markdown into JSON.
-
-Usage:
-  md_to_json [options] <markdown_file>
-  md_to_json -h | --help
-
-Options:
-  -h --help     Show this screen
-  --version     Print version number
-  -o <file>     Save output to a file instead of stdout
-  -i <val>      Indent nested JSON by this amount. Use a negative number for
-                most compact possible JSON. the [default: 2]
-```
-
-This translates a markdown document into JSON as described in the example above.
 
 ## Credits
 
