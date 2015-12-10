@@ -25,7 +25,7 @@ class PyTest(Command):
 
 def get_locals(filename):
     l = {}
-    execfile(filename, {}, l)
+    exec(open(filename, 'r').read(), {}, l)
     return l
 
 metadata = get_locals(os.path.join('markdown_to_json', '_metadata.py'))
