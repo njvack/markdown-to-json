@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Part of the markdown_to_json package
 # Written by Nate Vack <njvack@freshforever.net>
