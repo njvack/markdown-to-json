@@ -78,7 +78,6 @@ def main(args=[]):
     indent = -1
     try:
         indent = int(pargs.get('-i'))
-        logging.info(indent)
     except:
         logging.error("Error: Indent must be a number")
         sys.exit(1)
