@@ -1,1 +1,3 @@
-from docopt import *
+from __future__ import absolute_import
+
+from .docopt import *
