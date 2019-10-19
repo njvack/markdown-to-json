@@ -43,7 +43,7 @@ def writable_io_or_stdout(filename):
         return
     else:
         try:
-            f = open(filename, 'w')
+            f = open(filename, 'w', encoding='utf8')
             yield f
             f.close()
         except:
@@ -54,7 +54,7 @@ def writable_io_or_stdout(filename):
 
 def get_markdown_ast(markdown_file):
     try:
-        f = open(markdown_file, 'r')
+        f = open(markdown_file, 'r', encoding='utf8')
         return CommonMark.DocParser().parse(f.read())
     except:
         logging.error("Error: Can't open {0} for reading".format(
@@ -71,7 +71,7 @@ def jsonify_markdown(markdown_file, outfile, indent):
         ast = get_markdown_ast(markdown_file)
         nested = nester.nest(ast)
         rendered = renderer.stringify_dict(nested)
-        json.dump(rendered, f, indent=indent)
+        json.dump(rendered, f, indent=indent, ensure_ascii=False)
         f.write("\n")
     return 0
 
