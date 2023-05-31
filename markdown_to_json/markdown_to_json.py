@@ -80,10 +80,7 @@ class CMarkASTNester:
 
     def _ensure_list_singleton(self, blocks):
         """Make sure lists don't mix content"""
-        lists = [e for e in blocks if e.t == "List"]
-        if len(blocks) > 1 and len(lists) > 0:
-            first_item = lists[0]
-            raise ContentError("Error at line {0}: Can't mix lists and other content".format(first_item.start_line))
+        pass
 
 
 class ContentError(ValueError):
@@ -117,7 +114,10 @@ class Renderer:
 
     def stringify_dict(self, dictionary: dict[Any, Any]) -> OrderedDict:
         """Create dictionary of keys and values as strings"""
-        out = OrderedDict([(self._render_block(k), self._valuify(v)) for k, v in dictionary.items()])
+        if isinstance(dictionary, dict):
+            out = OrderedDict([(self._render_block(k), self._valuify(v)) for k, v in dictionary.items()])
+        else:
+            out = OrderedDict([("root", [self._render_block(v) for v in dictionary])])
         return out
 
     def _valuify(self, cm_vals: Any) -> Any:
@@ -129,7 +129,8 @@ class Renderer:
         first = cm_vals[0]
         if first.t == "List":
             return self._render_List(first)
-        return "\n\n".join([self._render_block(v) for v in cm_vals])
+        # HACK: This is just str'ing the unexpected lists
+        return "\n\n".join([str(self._render_block(v)) for v in cm_vals])
 
     def _render_block(self, block: Block):
         """Render any block"""

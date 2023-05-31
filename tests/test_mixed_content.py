@@ -5,9 +5,9 @@ from markdown_to_json.vendor.CommonMark import CommonMark
 from tests.util import locate_file
 
 
-def test_examples():
+def test_mixed():
     absolute_file_paths = []
-    for file in glob.glob(locate_file("../examples", __file__) + "/*.md"):
+    for file in glob.glob(locate_file("../examples/mixed", __file__) + "/*.md"):
         sample_search_results_file: str = locate_file(file, __file__)
         absolute_file_paths.append(sample_search_results_file)
     assert absolute_file_paths
