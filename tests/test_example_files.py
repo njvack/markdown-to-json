@@ -18,3 +18,13 @@ def test_examples():
             dictionary = CMarkASTNester().nest(ast)
             stringified = Renderer().stringify_dict(dictionary)
             assert stringified
+
+def test_issue_10():
+    value = """#stuff
+##Test  
+a  
+b  """
+    ast = CommonMark.DocParser().parse(value)
+    dictionary = CMarkASTNester().nest(ast)
+    stringified = Renderer().stringify_dict(dictionary)
+    assert stringified == {"stuff": {"Test": "a\nb"}}
