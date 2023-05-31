@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 from setuptools import setup, find_packages, Command
 import os
+from pathlib import Path
 
 packages = find_packages()
 
@@ -19,28 +19,32 @@ class PyTest(Command):
     def run(self):
         import sys
         import subprocess
-        errno = subprocess.call([sys.executable, 'runtests.py'])
+
+        errno = subprocess.call([sys.executable, "runtests.py"])
         raise SystemExit(errno)
 
 
 def get_locals(filename):
-    l = {}
-    exec(open(filename, 'r').read(), {}, l)
-    return l
+    the_locals = {}
+    exec(open(filename, "r").read(), {}, the_locals)
+    return the_locals
 
-metadata = get_locals(os.path.join('markdown_to_json', '_metadata.py'))
+
+metadata = get_locals(os.path.join("markdown_to_json", "_metadata.py"))
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="markdown-to-json",
-    version=metadata['version'],
-    author=metadata['author'],
-    author_email=metadata['author_email'],
-    license=metadata['license'],
-    url=metadata['url'],
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    version=metadata["version"],
+    author=metadata["author"],
+    author_email=metadata["author_email"],
+    license=metadata["license"],
+    url=metadata["url"],
     packages=find_packages(),
-    cmdclass={'test': PyTest},
-    entry_points={
-        'console_scripts': [
-            'md_to_json = markdown_to_json.scripts.md_to_json:main'
-        ]}
-    )
+    cmdclass={"test": PyTest},
+    entry_points={"console_scripts": ["md_to_json = markdown_to_json.scripts.md_to_json:main"]},
+)

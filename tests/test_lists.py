@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Part of the markdown_to_json package
 # Written by Nate Vack <njvack@freshforever.net>
 # Copyright 2015 Board of Regents of the University of Wisconsin System
@@ -30,5 +29,5 @@ def list_nested(list_md):
 
 def test_nester_lists_correctly(list_nested):
     stringified = Renderer().stringify_dict(list_nested)
-    l = stringified['Heading']
-    assert l == ['a', 'b', ['b.a', 'b.b'], 'c']
+    list_value = stringified["Heading"]
+    assert list_value == ["a", "b", ["b.a", "b.b"], "c"]

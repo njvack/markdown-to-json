@@ -1,0 +1,54 @@
+name: Build and Test
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pipenv' # caching pipenv dependencies
+      - name: Install pipenv and pipx
+        run: |
+          pip install pipenv && pip install pipx
+
+      - name: Install Dependencies
+        run: pipenv install --dev --skip-lock
+      - name: Install global dependencies
+        run: |
+          pipx install isort && pipx install black && pipx install bandit && pipx install pylint && \
+          pipx install pre-commit && pipx install poetry
+      - name: Run make
+        run: pipenv run make publish
+      - name: Upload Package
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: packages
+          path: dist/
+          if-no-files-found: error
+          retention-days: 1
+
+
+  pypi-publish:
+    name: Upload release to PyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/markdown-to-json
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+    # comment out next line if manual approval in place for pypi environment
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    steps:
+      - name: Get packages
+        uses: actions/download-artifact@v3.0.2
+        with:
+          name: packages
+          path: dist/
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+    needs: build

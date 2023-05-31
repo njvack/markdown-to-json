@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 # Part of the markdown_to_json package
 # Written by Nate Vack <njvack@freshforever.net>
 # Copyright 2015 Board of Regents of the University of Wisconsin System
-
 """Translate markdown into JSON.
 
 Usage:
@@ -18,81 +16,82 @@ Options:
                 most compact possible JSON. the [default: 2]
 """
 
-from __future__ import print_function, absolute_import, unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 
-
+import json
+import logging
 import sys
 from contextlib import contextmanager
-import json
+from typing import Optional
 
 import markdown_to_json
-from markdown_to_json.vendor.docopt import docopt
+from markdown_to_json.markdown_to_json import CMarkASTNester, Renderer
 from markdown_to_json.vendor import CommonMark
+from markdown_to_json.vendor.docopt import docopt
 
-from markdown_to_json.markdown_to_json import Renderer, CMarkASTNester
-
-import logging
-logging.basicConfig(
-    format="%(message)s", stream=sys.stderr, level=logging.INFO)
+logging.basicConfig(format="%(message)s", stream=sys.stderr, level=logging.INFO)
 
 
 @contextmanager
-def writable_io_or_stdout(filename):
+def writable_io_or_stdout(filename: Optional[str]):
+    """Switch between file and stdout"""
     if filename is None:
         yield sys.stdout
         return
-    else:
+
+    try:
+        file = open(filename, "w", encoding="utf8")
+        yield file
+        file.close()
+    # pylint: disable=bare-except
+    except:
+        logging.error("Error: Can't open {0} for writing".format(filename))
+        sys.exit(1)
+
+
+def get_markdown_ast(markdown_file: str):
+    """Parse AST"""
+    # pylint: disable=bare-except
+    with open(markdown_file, "r", encoding="utf8") as file:
         try:
-            f = open(filename, 'w', encoding='utf8')
-            yield f
-            f.close()
+            return CommonMark.DocParser().parse(file.read())
         except:
-            logging.error("Error: Can't open {0} for writing".format(
-                filename))
+            logging.error("Error: Can't open {0} for reading".format(markdown_file))
             sys.exit(1)
 
 
-def get_markdown_ast(markdown_file):
-    try:
-        f = open(markdown_file, 'r', encoding='utf8')
-        return CommonMark.DocParser().parse(f.read())
-    except:
-        logging.error("Error: Can't open {0} for reading".format(
-            markdown_file))
-        sys.exit(1)
-    finally:
-        f.close()
-
-
-def jsonify_markdown(markdown_file, outfile, indent):
+def jsonify_markdown(markdown_file: str, outfile: Optional[str], indent: int) -> int:
+    """Jsonify the markdown"""
     nester = CMarkASTNester()
     renderer = Renderer()
-    with writable_io_or_stdout(outfile) as f:
+    with writable_io_or_stdout(outfile) as file:
         ast = get_markdown_ast(markdown_file)
         nested = nester.nest(ast)
         rendered = renderer.stringify_dict(nested)
-        json.dump(rendered, f, indent=indent, ensure_ascii=False)
-        f.write("\n")
+        json.dump(rendered, file, indent=indent, ensure_ascii=False)
+        file.write("\n")
     return 0
 
 
-def main(args=[]):
+def main():
     pargs = docopt(
         __doc__,
-        version="md_to_json {0}".format(markdown_to_json.__version__,),)
-    indent = -1
+        version="md_to_json {0}".format(
+            markdown_to_json.__version__,
+        ),
+    )
+    # indent = -1
+
     try:
-        indent = int(pargs.get('-i'))
+        indent = int(pargs.get("-i"))
+    # pylint: disable=bare-except
     except:
         logging.error("Error: Indent must be a number")
         sys.exit(1)
     if indent < 0:
         indent = None
-    return jsonify_markdown(
-        pargs['<markdown_file>'],
-        pargs.get('-o'),
-        indent)
+    return jsonify_markdown(pargs["<markdown_file>"], pargs.get("-o"), indent)
 
 
-if __name__ == '__main__':
-    sys.exit(main(sys.argv[1:]))
+if __name__ == "__main__":
+    sys.exit(main())

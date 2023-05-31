@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+[dev-packages]
+pytest-cov = "*"
+pytest = "*"
+vermin = "*"
+tox = "*"
+isort = "*"
+bandit = "*"
+black = "*"
+pylint = "*"
+ruff = "*"
+mypy = "*"
+pre-commit = "*"
+
+[requires]
+python_version = "3.11"
