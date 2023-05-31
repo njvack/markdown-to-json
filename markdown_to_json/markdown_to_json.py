@@ -1,16 +1,8 @@
-# -*- coding: utf-8 -*-
-# Part of the markdown_to_json package
-# Written by Nate Vack <njvack@freshforever.net>
-# Copyright 2015 Board of Regents of the University of Wisconsin System
-
-from __future__ import unicode_literals, absolute_import
-
-from functools import reduce
-import operator
-
-from .vendor.ordereddict import OrderedDict
-
 """
+Part of the markdown_to_json package
+Written by Nate Vack <njvack@freshforever.net>
+Copyright 2015 Board of Regents of the University of Wisconsin System
+
 This module contains a class to change a CommonMark.py AST into a nested
 OrderedDict structure. Its rules:
 
@@ -50,17 +42,32 @@ structure from CMarkASTNester into an OrderedDict with strings as keys and
 strings, lists, or OrderedDicts as values.
 """
 
+from __future__ import absolute_import, unicode_literals
 
-class CMarkASTNester(object):
-    def __init__(self):
-        super(CMarkASTNester, self).__init__()
+import operator
+from functools import reduce
+from typing import Any, Optional, Union
 
-    def nest(self, ast):
+from .vendor.CommonMark.CommonMark import Block
+from .vendor.ordereddict import OrderedDict
+
+
+class CMarkASTNester:
+    """Nests DOM into a python dictionary"""
+
+    # def __init__(self):
+    #     super(CMarkASTNester, self).__init__()
+
+    def nest(self, ast: Block):
+        """Outermost next call"""
         return self._dictify_blocks(ast.children, 1)
 
-    def _dictify_blocks(self, blocks, heading_level):
+    def _dictify_blocks(self, blocks: Block, heading_level: int):
+        """Recursive nest call"""
+
         def matches_heading(block):
-            return block.t == 'ATXHeader' and block.level == heading_level
+            """Filter function to match headers"""
+            return block.t == "ATXHeader" and block.level == heading_level
 
         if not any((matches_heading(b) for b in blocks)):
             self._ensure_list_singleton(blocks)
@@ -72,24 +79,24 @@ class CMarkASTNester(object):
         return splitted
 
     def _ensure_list_singleton(self, blocks):
-        lists = [e for e in blocks if e.t == 'List']
+        """Make sure lists don't mix content"""
+        lists = [e for e in blocks if e.t == "List"]
         if len(blocks) > 1 and len(lists) > 0:
-            l = lists[0]
-            raise ContentError(
-                "Error at line {0}: Can't mix lists and other content".format(
-                    l.start_line))
+            first_item = lists[0]
+            raise ContentError("Error at line {0}: Can't mix lists and other content".format(first_item.start_line))
 
 
 class ContentError(ValueError):
-    pass
+    """Content Error"""
 
 
-def dictify_list_by(l, fx):
+def dictify_list_by(list_of_blocks: list[Any], filter_function) -> dict[Any, Any]:
+    """Turn list of tokens into dictionary of lists of tokens."""
     result = OrderedDict()
     cur = None
     children = []
-    for item in l:
-        if fx(item):
+    for item in list_of_blocks:
+        if filter_function(item):
             if cur:
                 # Pop cur, children into result
                 result[cur] = children
@@ -102,49 +109,58 @@ def dictify_list_by(l, fx):
     return result
 
 
-class Renderer(object):
-    def __init__(self):
-        super(Renderer, self).__init__()
+class Renderer:
+    """Processes DOM"""
 
-    def stringify_dict(self, d):
-        out = OrderedDict(
-            [
-                (self._render_block(k), self._valuify(v))
-                for k, v in d.items()
-            ])
+    # def __init__(self):
+    #     super(Renderer, self).__init__()
+
+    def stringify_dict(self, dictionary: dict[Any, Any]) -> OrderedDict:
+        """Create dictionary of keys and values as strings"""
+        out = OrderedDict([(self._render_block(k), self._valuify(v)) for k, v in dictionary.items()])
         return out
 
-    def _valuify(self, cm_vals):
-        if hasattr(cm_vals, 'items'):
+    def _valuify(self, cm_vals: Any) -> Any:
+        """Render values of dictionary as scalars or lists"""
+        if hasattr(cm_vals, "items"):
             return self.stringify_dict(cm_vals)
         if len(cm_vals) == 0:
-            return ''
+            return ""
         first = cm_vals[0]
-        if first.t == 'List':
+        if first.t == "List":
             return self._render_List(first)
         return "\n\n".join([self._render_block(v) for v in cm_vals])
 
-    def _render_block(self, block):
+    def _render_block(self, block: Block):
+        """Render any block"""
         method_name = "_render_{0}".format(block.t)
         method = self._render_generic_block
         if hasattr(self, method_name):
             method = getattr(self, method_name)
         return method(block)
 
-    def _render_generic_block(self, block):
-        if hasattr(block, 'strings') and len(block.strings) > 0:
-            tmp = []
-            for n in block.strings:
-                tmp.append(n.decode('utf8'))
-            return "\n".join(tmp)
+    # function name called based on block type
+    # pylint: disable=invalid-name
+    def _render_generic_block(self, block: Block) -> Optional[Union[str, list[Any]]]:
+        """Render any block"""
+        if hasattr(block, "strings") and len(block.strings) > 0:
+            return "\n".join(item.decode("utf8") if isinstance(item, bytes) else item for item in block.strings)
         if len(block.children) > 0:
             return [self._render_block(b) for b in block.children]
+        # Is this an error state?
+        return None
 
-    def _render_List(self, block):
+    # function name called based on block type
+    # pylint: disable=invalid-name
+    def _render_List(self, block: Block):
+        """Render list"""
         # We need to de-nest this one level -- we'll use the trick that
         # lists can be added to do this.
         list_items = [self._render_block(li) for li in block.children]
         return reduce(operator.add, list_items)
 
-    def _render_FencedCode(self, block):
+    # function name called based on block type
+    # pylint: disable=invalid-name
+    def _render_FencedCode(self, block: Block) -> str:
+        """Render code"""
         return "```\n" + block.string_content + "```"

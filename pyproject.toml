@@ -1,0 +1,151 @@
+[tool.poetry]
+name = "markdown_to_json"
+version = "1.2.0"
+description = "Lossy python to markdown serializer"
+
+authors = ["Nathan Vack <njvack@wisc.edu>"]
+keywords = ["serializer", "deserializer", "markdown",]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+
+]
+include = [
+    "markdown_to_json/**/*.py",
+    "markdown_to_json/**/*.md",
+    "markdown_to_json/**/*.txt",
+    "markdown_to_json/**/*.html",
+    "markdown_to_json/**/*.jinja",
+]
+exclude = [
+]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/njvack/markdown_to_json"
+homepage = "https://github.com/njvack/markdown_to_json"
+documentation ="https://github.com/njvack/markdown_to_json"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/matthewdeanmartin/markdown_to_json/issues"
+"Change Log" = "https://github.com/matthewdeanmartin/markdown_to_json/blob/main/CHANGES.md"
+
+[tool.poetry.dependencies]
+
+[tool.poetry.dev-dependencies]
+pytest-cov = "*"
+pytest = "*"
+vermin = "*"
+tox = "*"
+isort = "*"
+bandit = "*"
+black = "*"
+pylint = "*"
+ruff = "*"
+mypy = "*"
+pre-commit = "*"
+
+[tool.black]
+line-length = 120
+target-version = ['py39']
+include = '\.pyi?$'
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
+'''
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = [
+    "tests",
+]
+junit_family = "xunit1"
+norecursedirs = ["vendor", "scripts"]
+# don't know how to do this in toml
+#addopts = "--strict-markers"
+#markers =
+#	slow: marks tests as slow (deselect with '-m "not slow"')
+#	fast: marks tests as fast (deselect with '-m "not fast"')
+
+[tool.isort]
+default_section = "THIRDPARTY"
+force_grid_wrap = 0
+include_trailing_comma = true
+known_first_party = ["markdown_to_json"]
+line_length = 88
+multi_line_output = 3
+use_parentheses = true
+
+[tool.ruff]
+line-length = 1000
+
+# Enable Pyflakes `E` and `F` codes by default.
+select = ["E", "F"]
+ignore = [
+    "E722",
+    "E501",
+]
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    "markdown_to_json/vendor",
+    "dead_code",
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "hide"
+]
+per-file-ignores = { }
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.10.
+target-version = "py311"
+
+[tool.scriv]
+format = "md"
+version = "literal: pyproject.toml: project.version"
+
+[tool.hatch.version]
+path = "markdown_to_json/__init__.py"
+output_file = "CHANGELOG.${config:format}"
