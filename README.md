@@ -22,13 +22,15 @@ pip install markdown-to-json
 
 Also easy method:
 
-```
+```bash
 git clone https://github.com/njvack/markdown-to-json.git
 cd markdown_to_json
 ./setup.py install
 ```
 
-The package has no external requirements and has been tested on python 2.6.6 through 3.4.3.
+The package has no external requirements and has been tested python 3.6+.
+
+Please use version 1 or 1.1 for python 2.x.
 
 You'll get one executable:
 
@@ -49,13 +51,30 @@ Options:
                 most compact possible JSON. the [default: 2]
 ```
 
+Programmatic usage
+```python
+import markdown_to_json
+value = """
+# Nested List
+
+* Item 1
+    * Item 1.1
+* Item 2
+"""
+ast = markdown_to_json.CommonMark.DocParser().parse(value)
+dictionary = markdown_to_json.CMarkASTNester().nest(ast)
+stringified = dict(markdown_to_json.Renderer().stringify_dict(dictionary))
+
+assert stringified == {'Nested List': ['Item 1', ['Item 1.1'], 'Item 2']}
+```
+
 This translates a markdown document into JSON as described in the example below.
 
 ## Example
 
 The markdown:
 
-```
+```markdown
 # Description
 
 This is an example file
@@ -80,7 +99,7 @@ Here's something about Version 2
 
 will translate to the JSON:
 
-```
+```json
 {
   "Description": "This is an example file",
   "Authors": ["Nate Vack", "Vendor Packages", ["docopt", "CommonMark-py"]],

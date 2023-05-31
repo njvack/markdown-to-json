@@ -46,7 +46,7 @@ from __future__ import absolute_import, unicode_literals
 
 import operator
 from functools import reduce
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, Dict, List
 
 from .vendor.CommonMark.CommonMark import Block
 from .vendor.ordereddict import OrderedDict
@@ -87,7 +87,7 @@ class ContentError(ValueError):
     """Content Error"""
 
 
-def dictify_list_by(list_of_blocks: list[Any], filter_function) -> dict[Any, Any]:
+def dictify_list_by(list_of_blocks: List[Any], filter_function) -> Dict[Any, Any]:
     """Turn list of tokens into dictionary of lists of tokens."""
     result = OrderedDict()
     cur = None
@@ -112,7 +112,7 @@ class Renderer:
     # def __init__(self):
     #     super(Renderer, self).__init__()
 
-    def stringify_dict(self, dictionary: dict[Any, Any]) -> OrderedDict:
+    def stringify_dict(self, dictionary: Dict[Any, Any]) -> OrderedDict:
         """Create dictionary of keys and values as strings"""
         if isinstance(dictionary, dict):
             out = OrderedDict([(self._render_block(k), self._valuify(v)) for k, v in dictionary.items()])
@@ -142,7 +142,7 @@ class Renderer:
 
     # function name called based on block type
     # pylint: disable=invalid-name
-    def _render_generic_block(self, block: Block) -> Optional[Union[str, list[Any]]]:
+    def _render_generic_block(self, block: Block) -> Optional[Union[str, List[Any]]]:
         """Render any block"""
         if hasattr(block, "strings") and len(block.strings) > 0:
             return "\n".join(item.decode("utf8") if isinstance(item, bytes) else item for item in block.strings)
