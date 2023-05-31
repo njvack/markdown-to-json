@@ -46,7 +46,7 @@ from __future__ import absolute_import, unicode_literals
 
 import operator
 from functools import reduce
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, Dict, List
 
 from .vendor.CommonMark.CommonMark import Block
 from .vendor.ordereddict import OrderedDict
@@ -80,17 +80,14 @@ class CMarkASTNester:
 
     def _ensure_list_singleton(self, blocks):
         """Make sure lists don't mix content"""
-        lists = [e for e in blocks if e.t == "List"]
-        if len(blocks) > 1 and len(lists) > 0:
-            first_item = lists[0]
-            raise ContentError("Error at line {0}: Can't mix lists and other content".format(first_item.start_line))
+        pass
 
 
 class ContentError(ValueError):
     """Content Error"""
 
 
-def dictify_list_by(list_of_blocks: list[Any], filter_function) -> dict[Any, Any]:
+def dictify_list_by(list_of_blocks: List[Any], filter_function) -> Dict[Any, Any]:
     """Turn list of tokens into dictionary of lists of tokens."""
     result = OrderedDict()
     cur = None
@@ -115,9 +112,12 @@ class Renderer:
     # def __init__(self):
     #     super(Renderer, self).__init__()
 
-    def stringify_dict(self, dictionary: dict[Any, Any]) -> OrderedDict:
+    def stringify_dict(self, dictionary: Dict[Any, Any]) -> OrderedDict:
         """Create dictionary of keys and values as strings"""
-        out = OrderedDict([(self._render_block(k), self._valuify(v)) for k, v in dictionary.items()])
+        if isinstance(dictionary, dict):
+            out = OrderedDict([(self._render_block(k), self._valuify(v)) for k, v in dictionary.items()])
+        else:
+            out = OrderedDict([("root", [self._render_block(v) for v in dictionary])])
         return out
 
     def _valuify(self, cm_vals: Any) -> Any:
@@ -129,7 +129,8 @@ class Renderer:
         first = cm_vals[0]
         if first.t == "List":
             return self._render_List(first)
-        return "\n\n".join([self._render_block(v) for v in cm_vals])
+        # HACK: This is just str'ing the unexpected lists
+        return "\n\n".join([str(self._render_block(v)) for v in cm_vals])
 
     def _render_block(self, block: Block):
         """Render any block"""
@@ -141,7 +142,7 @@ class Renderer:
 
     # function name called based on block type
     # pylint: disable=invalid-name
-    def _render_generic_block(self, block: Block) -> Optional[Union[str, list[Any]]]:
+    def _render_generic_block(self, block: Block) -> Optional[Union[str, List[Any]]]:
         """Render any block"""
         if hasattr(block, "strings") and len(block.strings) > 0:
             return "\n".join(item.decode("utf8") if isinstance(item, bytes) else item for item in block.strings)

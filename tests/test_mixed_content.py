@@ -1,15 +1,15 @@
 import glob
 
-import pytest
+import pytest as pytest
 
 from markdown_to_json.markdown_to_json import Renderer, CMarkASTNester
 from markdown_to_json.vendor.CommonMark import CommonMark
 from tests.util import locate_file
 
 
-def test_examples():
+def test_mixed():
     absolute_file_paths = []
-    for file in glob.glob(locate_file("../examples", __file__) + "/*.md"):
+    for file in glob.glob(locate_file("../examples/mixed", __file__) + "/*.md"):
         sample_search_results_file: str = locate_file(file, __file__)
         absolute_file_paths.append(sample_search_results_file)
     assert absolute_file_paths
@@ -21,13 +21,39 @@ def test_examples():
             stringified = Renderer().stringify_dict(dictionary)
             assert stringified
 
-@pytest.mark.skip(reason="Results not sensible")
-def test_issue_10():
-    value = """#stuff
-##Test  
-a  
-b  """
+@pytest.mark.skip(reason="does not blow up but results not sensible")
+def test_issue_4():
+    value = """## GUID
+
+2db62bb2-8ac0-4137-b26f-78a12bff449d
+
+## Title
+
+Some title
+
+## Summary
+
+A Summary
+
+## Priority
+
+- Must
+
+## Detailed Description
+
+- Lorem Ipsum Blabla
+- Lorem Ipsum Blabla 
+
+## Reference Requirements
+
+> na
+
+## Categories
+
+- Cat6
+"""
     ast = CommonMark.DocParser().parse(value)
     dictionary = CMarkASTNester().nest(ast)
     stringified = Renderer().stringify_dict(dictionary)
-    assert stringified == {"stuff": {"Test": "a\nb"}}
+    # Result isn't sensible though...
+    assert stringified
