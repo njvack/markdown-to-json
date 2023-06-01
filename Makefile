@@ -33,7 +33,7 @@ test: clean .build_history/pylint .build_history/bandit Pipfile.lock
 	@echo "Running unit tests"
 	# $(VENV) pytest markdown-to-json --doctest-modules
 	$(VENV) python -m unittest discover
-	$(VENV) py.test tests --cov=markdown_to_json --cov-report=html --cov-fail-under 30
+	$(VENV) py.test tests --cov-config=.coveragerc --cov=markdown_to_json --cov-report=html --cov-fail-under 55
 
 .build_history:
 	@mkdir -p .build_history
