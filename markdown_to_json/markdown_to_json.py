@@ -46,7 +46,7 @@ from __future__ import absolute_import, unicode_literals
 
 import operator
 from functools import reduce
-from typing import Any, Optional, Union, Dict, List
+from typing import Any, Dict, List, Optional, Union
 
 from .vendor.CommonMark.CommonMark import Block
 from .vendor.ordereddict import OrderedDict
@@ -60,7 +60,10 @@ class CMarkASTNester:
 
     def nest(self, ast: Block):
         """Outermost next call"""
-        return self._dictify_blocks(ast.children, 1)
+
+        # Handle documents with ## as the top ATX header.
+        minimum = min(block.level if hasattr(block, "level") else 100000 for block in ast.children)
+        return self._dictify_blocks(ast.children, minimum)
 
     def _dictify_blocks(self, blocks: Block, heading_level: int):
         """Recursive nest call"""

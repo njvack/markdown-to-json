@@ -19,6 +19,7 @@ def test_examples():
             stringified = Renderer().stringify_dict(dictionary)
             assert stringified
 
+
 # @pytest.mark.skip(reason="Results not sensible")
 def test_issue_10():
     value = """# stuff

@@ -38,7 +38,7 @@ long_description = (this_directory / "README.md").read_text()
 setup(
     name="markdown-to-json",
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     version=metadata["version"],
     author=metadata["author"],
     author_email=metadata["author_email"],

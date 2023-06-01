@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "markdown_to_json"
-version = "1.2.0"
+version = "2.0.0"
 description = "Lossy python to markdown serializer"
 
 authors = ["Nathan Vack <njvack@wisc.edu>"]
@@ -11,10 +11,12 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-
+    "Programming Language :: Python :: 3.12",
 ]
 include = [
     "markdown_to_json/**/*.py",
@@ -36,6 +38,7 @@ documentation ="https://github.com/njvack/markdown_to_json"
 "Change Log" = "https://github.com/matthewdeanmartin/markdown_to_json/blob/main/CHANGES.md"
 
 [tool.poetry.dependencies]
+python = ">3"
 
 [tool.poetry.dev-dependencies]
 pytest-cov = "*"

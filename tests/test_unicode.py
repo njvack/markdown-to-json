@@ -22,4 +22,4 @@ def test_chinese():
             dictionary = CMarkASTNester().nest(ast)
             stringified = Renderer().stringify_dict(dictionary)
             assert stringified["issues"]
-            assert dict(stringified)=={'issues': OrderedDict([('紧急bug', '')])}
+            assert dict(stringified) == {"issues": OrderedDict([("紧急bug", "")])}

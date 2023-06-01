@@ -21,16 +21,18 @@ def test_mixed():
             stringified = Renderer().stringify_dict(dictionary)
             assert stringified
 
-@pytest.mark.skip(reason="does not blow up but results not sensible")
+
+# @pytest.mark.skip(reason="does not blow up but results not sensible")
 def test_issue_4():
-    value = """## GUID
+    value = """
+## GUID
 
 2db62bb2-8ac0-4137-b26f-78a12bff449d
 
 ## Title
 
 Some title
-
+        
 ## Summary
 
 A Summary
@@ -55,5 +57,12 @@ A Summary
     ast = CommonMark.DocParser().parse(value)
     dictionary = CMarkASTNester().nest(ast)
     stringified = Renderer().stringify_dict(dictionary)
-    # Result isn't sensible though...
-    assert stringified
+    assert stringified == {
+        "Categories": ["Cat6"],
+        "Detailed Description": ["Lorem Ipsum Blabla", "Lorem Ipsum Blabla "],
+        "GUID": "2db62bb2-8ac0-4137-b26f-78a12bff449d",
+        "Priority": ["Must"],
+        "Reference Requirements": "['na']",
+        "Summary": "A Summary",
+        "Title": "Some title",
+    }
