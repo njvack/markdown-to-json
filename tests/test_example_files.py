@@ -1,7 +1,5 @@
 import glob
 
-import pytest
-
 from markdown_to_json.markdown_to_json import Renderer, CMarkASTNester
 from markdown_to_json.vendor.CommonMark import CommonMark
 from tests.util import locate_file
@@ -21,13 +19,15 @@ def test_examples():
             stringified = Renderer().stringify_dict(dictionary)
             assert stringified
 
-@pytest.mark.skip(reason="Results not sensible")
+# @pytest.mark.skip(reason="Results not sensible")
 def test_issue_10():
-    value = """#stuff
-##Test  
-a  
-b  """
+    value = """# stuff
+
+## Test
+a
+b"""
     ast = CommonMark.DocParser().parse(value)
     dictionary = CMarkASTNester().nest(ast)
-    stringified = Renderer().stringify_dict(dictionary)
+    stringified = dict(Renderer().stringify_dict(dictionary))
+    stringified["stuff"] = dict(stringified["stuff"])
     assert stringified == {"stuff": {"Test": "a\nb"}}
