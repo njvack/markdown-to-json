@@ -44,12 +44,33 @@ strings, lists, or OrderedDicts as values.
 
 from __future__ import absolute_import, unicode_literals
 
+import json
 import operator
 from functools import reduce
 from typing import Any, Dict, List, Optional, Union
 
+from .vendor import CommonMark
 from .vendor.CommonMark.CommonMark import Block
 from .vendor.ordereddict import OrderedDict
+
+
+def dictify(markdown_str: str):
+    """
+    Turn a markdown string into a nested python dict
+    Really, just a little semantic sugar
+    """
+    ast = CommonMark.DocParser().parse(markdown_str)
+    nested = CMarkASTNester().nest(ast)
+    return Renderer().stringify_dict(nested)
+
+
+def jsonify(markdown_str: str):
+    """
+    Turn a markdown string into a json string
+    Also just semantic sugar
+    """
+    d = dictify(markdown_str)
+    return json.dumps(d)
 
 
 class CMarkASTNester:

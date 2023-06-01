@@ -61,11 +61,22 @@ value = """
     * Item 1.1
 * Item 2
 """
-ast = markdown_to_json.CommonMark.DocParser().parse(value)
-dictionary = markdown_to_json.CMarkASTNester().nest(ast)
-stringified = dict(markdown_to_json.Renderer().stringify_dict(dictionary))
 
-assert stringified == {'Nested List': ['Item 1', ['Item 1.1'], 'Item 2']}
+# The simple way:
+
+dictified = markdown_to_json.dictify(value)
+assert dictified == {'Nested List': ['Item 1', ['Item 1.1'], 'Item 2']}
+
+# Or, if you want a json string
+jsonified = markdown_to_json.jsonify(value)
+
+# The more involved way:
+
+ast = markdown_to_json.CommonMark.DocParser().parse(value)
+tmp = markdown_to_json.CMarkASTNester().nest(ast)  # This contains useless trash
+dictified = dict(markdown_to_json.Renderer().stringify_dict(dictionary))
+
+assert dictified == {'Nested List': ['Item 1', ['Item 1.1'], 'Item 2']}
 ```
 
 This translates a markdown document into JSON as described in the example below.
