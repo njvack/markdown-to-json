@@ -1,7 +1,5 @@
 import glob
 
-import pytest
-
 from markdown_to_json.markdown_to_json import Renderer, CMarkASTNester
 from markdown_to_json.vendor.CommonMark import CommonMark
 from tests.util import locate_file
