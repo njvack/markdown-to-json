@@ -213,7 +213,7 @@ def unescape(s):
 
 def isBlank(s):
     """Returns True if string contains only space characters."""
-    return bool(re.compile("^\s*$").match(s))
+    return bool(re.compile(r"^\s*$").match(s))
 
 
 def normalizeReference(s):
@@ -366,10 +366,10 @@ class InlineParser(object):
     def parseAutoLink(self, inlines):
         """Attempt to parse an autolink (URL or email in pointy brackets)."""
         m = self.match(
-            "^<([a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>"
+            r"^<([a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>"
         )
         m2 = self.match(
-            "^<(?:coap|doi|javascript|aaa|aaas|about|acap|cap|cid|crid|data|dav|dict|dns|file|ftp|geo|go|gopher|h323|http|https|iax|icap|im|imap|info|ipp|iris|iris.beep|iris.xpc|iris.xpcs|iris.lwz|ldap|mailto|mid|msrp|msrps|mtqp|mupdate|news|nfs|ni|nih|nntp|opaquelocktoken|pop|pres|rtsp|service|session|shttp|sieve|sip|sips|sms|snmp|soap.beep|soap.beeps|tag|tel|telnet|tftp|thismessage|tn3270|tip|tv|urn|vemmi|ws|wss|xcon|xcon-userid|xmlrpc.beep|xmlrpc.beeps|xmpp|z39.50r|z39.50s|adiumxtra|afp|afs|aim|apt|attachment|aw|beshare|bitcoin|bolo|callto|chrome|chrome-extension|com-eventbrite-attendee|content|cvs|dlna-playsingle|dlna-playcontainer|dtn|dvb|ed2k|facetime|feed|finger|fish|gg|git|gizmoproject|gtalk|hcp|icon|ipn|irc|irc6|ircs|itms|jar|jms|keyparc|lastfm|ldaps|magnet|maps|market|message|mms|ms-help|msnim|mumble|mvn|notes|oid|palm|paparazzi|platform|proxy|psyc|query|res|resource|rmi|rsync|rtmp|secondlife|sftp|sgn|skype|smb|soldat|spotify|ssh|steam|svn|teamspeak|things|udp|unreal|ut2004|ventrilo|view-source|webcal|wtai|wyciwyg|xfire|xri|ymsgr):[^<>\x00-\x20]*>",
+            r"^<(?:coap|doi|javascript|aaa|aaas|about|acap|cap|cid|crid|data|dav|dict|dns|file|ftp|geo|go|gopher|h323|http|https|iax|icap|im|imap|info|ipp|iris|iris.beep|iris.xpc|iris.xpcs|iris.lwz|ldap|mailto|mid|msrp|msrps|mtqp|mupdate|news|nfs|ni|nih|nntp|opaquelocktoken|pop|pres|rtsp|service|session|shttp|sieve|sip|sips|sms|snmp|soap.beep|soap.beeps|tag|tel|telnet|tftp|thismessage|tn3270|tip|tv|urn|vemmi|ws|wss|xcon|xcon-userid|xmlrpc.beep|xmlrpc.beeps|xmpp|z39.50r|z39.50s|adiumxtra|afp|afs|aim|apt|attachment|aw|beshare|bitcoin|bolo|callto|chrome|chrome-extension|com-eventbrite-attendee|content|cvs|dlna-playsingle|dlna-playcontainer|dtn|dvb|ed2k|facetime|feed|finger|fish|gg|git|gizmoproject|gtalk|hcp|icon|ipn|irc|irc6|ircs|itms|jar|jms|keyparc|lastfm|ldaps|magnet|maps|market|message|mms|ms-help|msnim|mumble|mvn|notes|oid|palm|paparazzi|platform|proxy|psyc|query|res|resource|rmi|rsync|rtmp|secondlife|sftp|sgn|skype|smb|soldat|spotify|ssh|steam|svn|teamspeak|things|udp|unreal|ut2004|ventrilo|view-source|webcal|wtai|wyciwyg|xfire|xri|ymsgr):[^<>\x00-\x20]*>",
             re.IGNORECASE,
         )
         if m:
@@ -413,12 +413,12 @@ class InlineParser(object):
         a = self.peek()
         char_after = a if a else "\\n"
 
-        can_open = (numdelims > 0) and (numdelims <= 3) and (not re.match("\s", char_after))
-        can_close = (numdelims > 0) and (numdelims <= 3) and (not re.match("\s", char_before))
+        can_open = (numdelims > 0) and (numdelims <= 3) and (not re.match(r"\s", char_after))
+        can_close = (numdelims > 0) and (numdelims <= 3) and (not re.match(r"\s", char_before))
 
         if c == "_":
-            can_open = can_open and (not re.match("[a-z0-9]", char_before, re.IGNORECASE))
-            can_close = can_close and (not re.match("[a-z0-9]", char_after, re.IGNORECASE))
+            can_open = can_open and (not re.match(r"[a-z0-9]", char_before, re.IGNORECASE))
+            can_close = can_close and (not re.match(r"[a-z0-9]", char_after, re.IGNORECASE))
         self.pos = startpos
         return {"numdelims": numdelims, "can_open": can_open, "can_close": can_close}
 
@@ -1025,7 +1025,7 @@ class DocParser:
                 container = self.addChild("ATXHeader", line_number, first_nonspace)
                 container.level = len(ATXmatch.group(0).strip())
                 if not re.search(r"\\#", ln[offset:]) is None:
-                    container.strings = [re.sub(r"(?:(\\#) *#*| *#+) *$", "\g<1>", ln[offset:])]
+                    container.strings = [re.sub(r"(?:(\\#) *#*| *#+) *$", r"\g<1>", ln[offset:])]
                 else:
                     container.strings = [re.sub(r"(?:(\\#) *#*| *#+) *$", "", ln[offset:])]
                 break
@@ -1249,14 +1249,14 @@ class HTMLRenderer(object):
         if not re.search("mailto|MAILTO", s):
             if sys.version_info >= (3, 0):
                 return re.sub(
-                    "[&](?![#](x[a-f0-9]{1,8}|[0-9]{1,8});|[a-z][a-z0-9]{1,31};)",
+                    r"[&](?![#](x[a-f0-9]{1,8}|[0-9]{1,8});|[a-z][a-z0-9]{1,31};)",
                     "&amp;",
                     HTMLquote(HTMLunescape(s), ":/=*%?&)(#"),
                     re.IGNORECASE,
                 )
             else:
                 return re.sub(
-                    "[&](?![#](x[a-f0-9]{1,8}|[0-9]{1,8});|[a-z][a-z0-9]{1,31};)",
+                    r"[&](?![#](x[a-f0-9]{1,8}|[0-9]{1,8});|[a-z][a-z0-9]{1,31};)",
                     "&amp;",
                     HTMLquote(HTMLunescape(s).encode("utf-8"), ":/=*%?&)(#"),
                     re.IGNORECASE,
@@ -1269,7 +1269,7 @@ class HTMLRenderer(object):
         if preserve_entities:
             e = self.escape_pairs[1:]
             s = re.sub(
-                "[&](?![#](x[a-f0-9]{1,8}|[0-9]{1,8});|[a-z][a-z0-9]{1,31};)", "&amp;", HTMLunescape(s), re.IGNORECASE
+                r"[&](?![#](x[a-f0-9]{1,8}|[0-9]{1,8});|[a-z][a-z0-9]{1,31};)", "&amp;", HTMLunescape(s), re.IGNORECASE
             )
         else:
             e = self.escape_pairs
