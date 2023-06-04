@@ -12,4 +12,4 @@ author_email = "njvack@wisc.edu"
 # pylint: disable=redefined-builtin
 license = "MIT"
 copyright = "Copyright 2015 Boards of Regent of the University of Wisconsin System"
-url = "https://github.com/njvack/bids-json-writer"
+url = "https://github.com/njvack/markdown-to-json"

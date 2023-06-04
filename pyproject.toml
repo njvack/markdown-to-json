@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "markdown_to_json"
 version = "2.0.0"
-description = "Lossy python to markdown serializer"
+description = "Markdown to dict and json deserializer"
 
 authors = ["Nathan Vack <njvack@wisc.edu>"]
 keywords = ["serializer", "deserializer", "markdown",]
@@ -34,11 +34,11 @@ homepage = "https://github.com/njvack/markdown_to_json"
 documentation ="https://github.com/njvack/markdown_to_json"
 
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/matthewdeanmartin/markdown_to_json/issues"
-"Change Log" = "https://github.com/matthewdeanmartin/markdown_to_json/blob/main/CHANGES.md"
+"Bug Tracker" = "https://github.com/njvack/markdown_to_json/issues"
+"Change Log" = "https://github.com/njvack/markdown_to_json/blob/main/CHANGELOG.md"
 
 [tool.poetry.dependencies]
-python = ">3"
+python = ">=3.6.2"
 
 [tool.poetry.dev-dependencies]
 pytest-cov = "*"
@@ -52,6 +52,12 @@ pylint = "*"
 ruff = "*"
 mypy = "*"
 pre-commit = "*"
+
+[console_scripts]
+md_to_json = 'markdown_to_json.scripts.md_to_json:main'
+
+[tool.poetry.scripts]
+md_to_json = 'markdown_to_json.scripts.md_to_json:main'
 
 [tool.black]
 line-length = 120
@@ -87,11 +93,7 @@ testpaths = [
 ]
 junit_family = "xunit1"
 norecursedirs = ["vendor", "scripts"]
-# don't know how to do this in toml
-#addopts = "--strict-markers"
-#markers =
-#	slow: marks tests as slow (deselect with '-m "not slow"')
-#	fast: marks tests as fast (deselect with '-m "not fast"')
+
 
 [tool.isort]
 default_section = "THIRDPARTY"

@@ -4,7 +4,7 @@
 
 A simple tool to convert Markdown (CommonMark dialect) data into JSON. It uses headings as JSON keys, and the stuff following headings as values. Lists are turned into arrays. Higher heading values yield nested JSON keys.
 
-## Why would I want to do this?
+## Why would you want to do this?
 
 If you don't mind the loss of fidelity to the exact Markdown Document Object Model (DOM), you can get a simple python or json datastructure to extract data-like structures from a Markdown document.
 
@@ -12,11 +12,23 @@ This tool was built to allow easy creation of dataset descriptions for the [Brai
 
 ## Installation
 
-```
+Non isolated install from pypi
+```bash
 pip install markdown-to-json
+md_to_json --help
 ```
 
-Also easy method:
+Isolated install with pipx if you only want the CLI
+```bash
+pipx install markdown-to-json
+md_to_json --help
+```
+
+Install bleeding edge from github
+```bash
+pip install git+https://github.com/njvack/markdown-to-json/
+python -m markdown_to_json --help
+```
 
 ```bash
 git clone https://github.com/njvack/markdown-to-json.git
@@ -28,9 +40,7 @@ The package has no external requirements and has been tested python 3.6+.
 
 Please use version 1 or 1.1 for python 2.x.
 
-You'll get one executable:
-
-## `md_to_json`
+## CLI Usage, `md_to_json`
 
 ```
 Translate markdown into JSON.
@@ -47,7 +57,7 @@ Options:
                 most compact possible JSON. the [default: 2]
 ```
 
-Programmatic usage
+## Programmatic usage
 ```python
 import markdown_to_json
 value = """
