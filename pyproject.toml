@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "markdown_to_json"
-version = "2.0.0"
+version = "2.1.0"
 description = "Markdown to dict and json deserializer"
 
 authors = ["Nathan Vack <njvack@wisc.edu>"]
