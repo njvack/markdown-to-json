@@ -37,7 +37,7 @@ jobs:
     name: Upload release to PyPI
     runs-on: ubuntu-latest
     environment:
-      name: pypi
+      name: pypi-publish
       url: https://pypi.org/p/markdown-to-json
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
