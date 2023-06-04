@@ -1,8 +1,8 @@
 import glob
+from collections import OrderedDict
 
 from markdown_to_json.markdown_to_json import Renderer, CMarkASTNester
 from markdown_to_json.vendor.CommonMark import CommonMark
-from markdown_to_json.vendor.ordereddict import OrderedDict
 from tests.util import locate_file
 
 

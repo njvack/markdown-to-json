@@ -46,12 +46,12 @@ from __future__ import absolute_import, unicode_literals
 
 import json
 import operator
+from collections import OrderedDict
 from functools import reduce
 from typing import Any, Dict, List, Optional, Union
 
 from .vendor import CommonMark
 from .vendor.CommonMark.CommonMark import Block
-from .vendor.ordereddict import OrderedDict
 
 
 def dictify(markdown_str: str):
@@ -104,7 +104,6 @@ class CMarkASTNester:
 
     def _ensure_list_singleton(self, blocks):
         """Make sure lists don't mix content"""
-        pass
 
 
 class ContentError(ValueError):
