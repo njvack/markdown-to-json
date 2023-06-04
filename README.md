@@ -2,19 +2,15 @@
 
 ## Description
 
-A simple tool to convert Markdown (technically CommonMark) data into JSON. It uses headings as JSON keys, and the stuff following headings as values. Lists are turned into arrays. Higher heading values yield nested JSON keys.
+A simple tool to convert Markdown (CommonMark dialect) data into JSON. It uses headings as JSON keys, and the stuff following headings as values. Lists are turned into arrays. Higher heading values yield nested JSON keys.
 
-## Why the hell would I want to do this?
+## Why would I want to do this?
 
-Sometimes, you need to write JSON. Writing it by hand is a pain. It's a fiddly format and there are strings to escape and commas and it looks bad and you'll have validation errors and yuck. You could build a custom tool to write your particular JSON, but that's a bunch of work. You could use some JSON-specific editor, but they tend to be pretty neckbeard. Sometimes, you maybe just want to open a text editor and pump out a little nested data structure in a human-readable way.
+If you don't mind the loss of fidelity to the exact Markdown Document Object Model (DOM), you can get a simple python or json datastructure to extract data-like structures from a Markdown document.
 
-This lets you do that. Markdown is easy.
-
-As a point of reference, this tool was built to allow easy(-ish) creation of dataset descriptions for the [Brain Imaging Data Structure](http://bids.neuroimaging.io/) data sharing specification.
+This tool was built to allow easy creation of dataset descriptions for the [Brain Imaging Data Structure](http://bids.neuroimaging.io/) data sharing specification.
 
 ## Installation
-
-Easy method:
 
 ```
 pip install markdown-to-json
@@ -63,20 +59,12 @@ value = """
 """
 
 # The simple way:
-
 dictified = markdown_to_json.dictify(value)
 assert dictified == {'Nested List': ['Item 1', ['Item 1.1'], 'Item 2']}
 
 # Or, if you want a json string
 jsonified = markdown_to_json.jsonify(value)
-
-# The more involved way:
-
-ast = markdown_to_json.CommonMark.DocParser().parse(value)
-tmp = markdown_to_json.CMarkASTNester().nest(ast)  # This contains useless trash
-dictified = dict(markdown_to_json.Renderer().stringify_dict(dictionary))
-
-assert dictified == {'Nested List': ['Item 1', ['Item 1.1'], 'Item 2']}
+assert jsonified == """{"Nested List": ["Item 1", ["Item 1.1"], "Item 2"]}"""
 ```
 
 This translates a markdown document into JSON as described in the example below.
@@ -125,10 +113,14 @@ will translate to the JSON:
 
 `markdown_to_json` was written by Nate Vack <njvack@freshforever.net> at the Center for Healthy Minds at the University of Wisconsin–Madison.
 
+Maintenance development by [Matthew Martin](https://github.com/matthewdeanmartin/) 
+
 This tool ships a few really excellent tools in its `vendor` directory:
 
 [docopt](https://github.com/docopt/docopt) is copyright (c) 2012 Vladimir Keleshev, <vladimir@keleshev.com>
 
-[CommonMark-py](https://github.com/rolandshoemaker/CommonMark-py) is copyright Copyright (c) 2014, Bibek Kafle and Roland Shoemaker
+Upgraded to docopt-ng.
 
-The packaged ordereddict implementation is copyright (c) 2009 Raymond Hettinger
+[CommonMark-py](https://github.com/rolandshoemaker/CommonMark-py) is copyright Copyright (c) 2014, Bibek Kafle and Roland Shoemaker. 
+
+Cannot upgrade to 0.6.0 because of breaking changes in AST.
