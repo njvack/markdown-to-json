@@ -42,7 +42,7 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     # comment out next line if manual approval in place for pypi environment
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    # if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
     steps:
       - name: Get packages
         uses: actions/download-artifact@v3.0.2
