@@ -1,12 +1,12 @@
 """
 Part of the markdown_to_json package
 Written by Nate Vack <njvack@freshforever.net>
-Copyright 2015 Board of Regents of the University of Wisconsin System
+Copyright 2023 Board of Regents of the University of Wisconsin System
 """
 
 # TODO, switch to dunder meta.
 # pylint: disable=invalid-name
-version = "1.2.0"
+version = "2.0.0"
 author = "Nathan Vack"
 author_email = "njvack@wisc.edu"
 # pylint: disable=redefined-builtin

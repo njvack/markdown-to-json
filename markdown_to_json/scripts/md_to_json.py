@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Part of the markdown_to_json package
 # Written by Nate Vack <njvack@freshforever.net>
-# Copyright 2015 Board of Regents of the University of Wisconsin System
+# Copyright 2023 Board of Regents of the University of Wisconsin System
 """Translate markdown into JSON.
 
 Usage:
