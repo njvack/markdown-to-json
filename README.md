@@ -4,7 +4,7 @@
 
 A simple tool to convert Markdown (CommonMark dialect) data into JSON. It uses headings as JSON keys, and the stuff following headings as values. Lists are turned into arrays. Higher heading values yield nested JSON keys.
 
-## Is this for you?
+## Is this for me?
 
 If you have to ask that question, it probably isn't. Here are some cases where I'd recommend something else:
 
