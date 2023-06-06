@@ -4,11 +4,23 @@
 
 A simple tool to convert Markdown (CommonMark dialect) data into JSON. It uses headings as JSON keys, and the stuff following headings as values. Lists are turned into arrays. Higher heading values yield nested JSON keys.
 
-## Why would you want to do this?
+## Is this for you?
 
-If you don't mind the loss of fidelity to the exact Markdown Document Object Model (DOM), you can get a simple python or json datastructure to extract data-like structures from a Markdown document.
+If you have to ask that question, it probably isn't. Here are some cases where I'd recommend something else:
 
-This tool was built to allow easy creation of dataset descriptions for the [Brain Imaging Data Structure](http://bids.neuroimaging.io/) data sharing specification.
+### I want to parse arbitrary Markdown
+
+In this case, I'd recommend the excellent [markdown-it-py](https://github.com/executablebooks/markdown-it-py)
+
+### I want to hand-write nested structures but hate writing JSON by hand
+
+In this case, [TOML](https://toml.io/en/) might be what you're looking for. [Python support is built-in as of 3.11](https://docs.python.org/3/library/tomllib.html). If I had known of TOML, I would never have written this package.
+
+### Nope, those situations don't cover me; I really want to parse Markdown into data
+
+If you don't mind the loss of fidelity to the exact Markdown Document Object Model (DOM), you can get a simple python or json data structure to extract data-like structures from a subset of Markdown documents.
+
+This tool was built to allow easier creation of dataset descriptions for the [Brain Imaging Data Structure](http://bids.neuroimaging.io/) data sharing specification.
 
 ## Installation
 
@@ -43,7 +55,7 @@ Please use version 1 or 1.1 for python 2.x.
 ## CLI Usage, `md_to_json`
 
 ```
-Translate markdown into JSON.
+Translate Markdown into JSON.
 
 Usage:
   md_to_json [options] <markdown_file>
@@ -77,11 +89,11 @@ jsonified = markdown_to_json.jsonify(value)
 assert jsonified == """{"Nested List": ["Item 1", ["Item 1.1"], "Item 2"]}"""
 ```
 
-This translates a markdown document into JSON as described in the example below.
+This translates a Markdown document into JSON as described in the example below.
 
 ## Example
 
-The markdown:
+The Markdown:
 
 ```markdown
 # Description
@@ -121,9 +133,9 @@ will translate to the JSON:
 
 ## Credits
 
-`markdown_to_json` was written by Nate Vack <njvack@freshforever.net> at the Center for Healthy Minds at the University of Wisconsin–Madison.
+`markdown_to_json` was written by [Nate Vack](https://github.com/njvack) at the Center for Healthy Minds at the University of Wisconsin–Madison.
 
-Maintenance development by [Matthew Martin](https://github.com/matthewdeanmartin/) 
+Maintenance development by [Matthew Martin](https://github.com/matthewdeanmartin/)
 
 This tool ships a few really excellent tools in its `vendor` directory:
 
@@ -131,6 +143,6 @@ This tool ships a few really excellent tools in its `vendor` directory:
 
 Upgraded to docopt-ng.
 
-[CommonMark-py](https://github.com/rolandshoemaker/CommonMark-py) is copyright Copyright (c) 2014, Bibek Kafle and Roland Shoemaker. 
+[CommonMark-py](https://github.com/rolandshoemaker/CommonMark-py) is copyright Copyright (c) 2014, Bibek Kafle and Roland Shoemaker.
 
 Cannot upgrade to 0.6.0 because of breaking changes in AST.
