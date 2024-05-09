@@ -1,8 +1,7 @@
 from markdown_to_json.scripts.md_to_json import jsonify_markdown
-from unittest.mock import mock_open, patch
+from unittest.mock import patch
 import json
 import pytest
-import sys
 
 
 # Sample data for testing
@@ -25,17 +24,17 @@ def test_jsonify_markdown(tmp_path, markdown_content, outfile, indent, expected_
     markdown_file = tmp_path / "test.md"
     markdown_file.write_text(markdown_content)
 
-    with patch("sys.exit") as mock_exit:
+    with patch("sys.exit") as _mock_exit:
         if outfile:
             output_path = tmp_path / outfile
             jsonify_markdown(str(markdown_file), str(output_path), indent)
             with open(output_path, "r", encoding="utf-8") as f:
                 actual_output = f.read()
-                assert json.dumps(json.loads(actual_output), indent=indent).strip() == json.dumps(json.loads(expected_output), indent=indent).strip()
+                assert (
+                    json.dumps(json.loads(actual_output), indent=indent).strip()
+                    == json.dumps(json.loads(expected_output), indent=indent).strip()
+                )
         else:
-            # For stdout, we'll need to capture the output with pytest's capsys
-            # with pytest.raises(SystemExit) as _e:
-
             if expect_exception:
                 with pytest.raises(FileNotFoundError):
                     jsonify_markdown(INVALID_MARKDOWN_PATH, None, indent)
@@ -72,10 +71,8 @@ def test_jsonify_markdown_with_exceptions(
         outfile = None  # Output set to None to use stdout
 
     with patch(func_to_mock, side_effect=exception):
-        # with patch.object(sys, "exit") as mock_exit:
         with pytest.raises(SystemExit):
             jsonify_markdown(str(markdown_file), outfile, 2)
-        # mock_exit.assert_called_once()
         assert expected_error_message in caplog.text
 
 

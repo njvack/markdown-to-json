@@ -117,7 +117,7 @@ def dictify_list_by(list_of_blocks: List[Any], filter_function) -> Dict[Any, Any
     """Turn list of tokens into dictionary of lists of tokens."""
     result = OrderedDict()
     cur = None
-    children:list[Any] = []
+    children: list[Any] = []
     for item in list_of_blocks:
         if filter_function(item):
             if cur:
