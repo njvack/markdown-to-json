@@ -21,5 +21,5 @@ def test_dictify(simple_md):
 
 def test_jsonify(simple_md):
     json_out = markdown_to_json.jsonify(simple_md)
-    assert type(json_out) == str
+    assert isinstance(json_out, (str,))
     assert "People" in json_out

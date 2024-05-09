@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.1 - 2024-05-09
+
+### Added
+
+- Lists with blank values will parse to something instead of blowing up.
+
+### Removed
+
+- No longer supports python 3.6 or 3.7
+
 ## 2.0.0 - 2023-06-04
 
 ### Added
