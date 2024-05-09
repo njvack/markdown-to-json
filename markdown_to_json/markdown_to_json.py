@@ -172,7 +172,7 @@ class Renderer:
         if len(block.children) > 0:
             return [self._render_block(b) for b in block.children]
         # Is this an error state?
-        return None
+        return []
 
     # function name called based on block type
     # pylint: disable=invalid-name
