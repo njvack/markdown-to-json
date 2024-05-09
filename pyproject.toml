@@ -51,6 +51,7 @@ pylint = ">=3.1.0 "
 ruff = ">=0.4.3"
 mypy = ">=1.10.0"
 pre-commit = ">=2"
+pytest-mock = "*"
 
 [tool.poetry.scripts]
 md_to_json = 'markdown_to_json.scripts.md_to_json:main'

@@ -44,8 +44,8 @@ def writable_io_or_stdout(filename: Optional[str]):
         yield file
         file.close()
     # pylint: disable=bare-except
-    except:
-        logging.error("Error: Can't open {0} for writing".format(filename))
+    except Exception as ex:
+        logging.error(f"Error: Can't open {filename} for writing, {ex}")
         sys.exit(1)
 
 
