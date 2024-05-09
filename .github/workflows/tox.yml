@@ -16,7 +16,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest ]
         # can't use this image for less than 3.7 as of right now.
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12" ]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12" ]
     steps:
       - uses: actions/checkout@v3
       - name: Using Python ${{ matrix.python-version }}

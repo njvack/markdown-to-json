@@ -1,7 +1,7 @@
 ---
 repos:
     -   repo: https://github.com/pre-commit/pre-commit-hooks
-        rev: v4.4.0
+        rev: v4.6.0
         hooks:
             # each hook takes about 1s to run. These are expensive-ish checks
             -   id: check-added-large-files
@@ -18,15 +18,15 @@ repos:
                 args: [ --remove ]
             -   id: forbid-new-submodules
     -   repo: https://github.com/abravalheri/validate-pyproject
-        rev: v0.10.1
+        rev: v0.17
         hooks:
             -   id: validate-pyproject
     -   repo: https://github.com/psf/black
-        rev: 22.12.0
+        rev: 24.4.2
         hooks:
             -   id: black
     -   repo: https://github.com/charliermarsh/ruff-pre-commit
-        rev: v0.0.222
+        rev: v0.4.3
         hooks:
             -   id: ruff
                 exclude: ^markdown_to_json/vendor/.*$

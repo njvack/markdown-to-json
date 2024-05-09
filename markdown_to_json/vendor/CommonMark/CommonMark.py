@@ -275,7 +275,6 @@ class Block(object):
 
 
 class InlineParser(object):
-
     """INLINE PARSER
 
     These are methods of an InlineParser class, defined below.

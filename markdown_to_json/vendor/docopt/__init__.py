@@ -21,6 +21,7 @@ Contributors (roughly in chronological order):
  * Copyright (c) 2019 itdaniher, itdaniher@gmail.com
 
 """
+
 from __future__ import annotations
 
 import re
@@ -99,12 +100,10 @@ def levenshtein(source: str, target: str) -> int:
 
 
 class DocoptLanguageError(Exception):
-
     """Error in construction of usage-message by developer."""
 
 
 class DocoptExit(SystemExit):
-
     """Exit in case user invoked program with incorrect arguments."""
 
     usage = ""
@@ -166,7 +165,6 @@ TSingleMatch = Tuple[Union[int, None], Union["LeafPattern", None]]
 
 
 class LeafPattern(Pattern):
-
     """Leaf/terminal node of a pattern tree."""
 
     def __repr__(self) -> str:
@@ -210,7 +208,6 @@ class LeafPattern(Pattern):
 
 
 class BranchPattern(Pattern):
-
     """Branch/inner node of a pattern tree."""
 
     def __init__(self, *children) -> None:
@@ -354,7 +351,6 @@ class NotRequired(BranchPattern):
 
 
 class OptionsShortcut(NotRequired):
-
     """Marker/placeholder for [options] shortcut."""
 
 

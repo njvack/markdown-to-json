@@ -83,8 +83,11 @@ class CMarkASTNester:
         """Outermost next call"""
 
         # Handle documents with ## as the top ATX header.
-        minimum = min(block.level if hasattr(block, "level") else 100000 for block in ast.children)
-        return self._dictify_blocks(ast.children, minimum)
+        parts = [block.level if hasattr(block, "level") else 100000 for block in ast.children]
+        if parts:
+            minimum = min(parts)
+            return self._dictify_blocks(ast.children, minimum)
+        return []
 
     def _dictify_blocks(self, blocks: Block, heading_level: int):
         """Recursive nest call"""
@@ -114,7 +117,7 @@ def dictify_list_by(list_of_blocks: List[Any], filter_function) -> Dict[Any, Any
     """Turn list of tokens into dictionary of lists of tokens."""
     result = OrderedDict()
     cur = None
-    children = []
+    children: list[Any] = []
     for item in list_of_blocks:
         if filter_function(item):
             if cur:
@@ -167,7 +170,7 @@ class Renderer:
     # pylint: disable=invalid-name
     def _render_generic_block(self, block: Block) -> Optional[Union[str, List[Any]]]:
         """Render any block"""
-        if hasattr(block, "strings") and len(block.strings) > 0:
+        if hasattr(block, "strings") and hasattr(block.strings, "__len__") and len(block.strings) > 0:
             return "\n".join(item.decode("utf8") if isinstance(item, bytes) else item for item in block.strings)
         if len(block.children) > 0:
             return [self._render_block(b) for b in block.children]
