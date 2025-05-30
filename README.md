@@ -131,6 +131,39 @@ will translate to the JSON:
 }
 ```
 
+## What happens with other Markdown structures?
+
+Markdown can represent a lot more structures than fit cleanly into arrays and dicts. In general, `markdown_to_json` will just drop content that doesn't fit the "strictly nested headers followed by content at the leaves, or lists" structure.
+
+So, for example:
+
+```
+# main_heading_1
+
+Main Heading 1 Content
+
+## subheading_1
+
+Subheading 1 Content
+
+# main_heading_2
+
+Main Heading 2 Content
+```
+
+will parse as:
+
+```
+{
+    "main_heading_1": {
+        "subheading_1": "Subheading 1 Content"
+    },
+    "main_heading_1": "Main Heading 2 Content"
+}
+```
+
+Note that "Main Heading 1 Content" is lost here -- since `main_heading_1` isn't a leaf, there's no place to put that content. No, we're not going to turn `main_heading_1`'s value into a list, or add magic extra keys. If you want to losslessly parse arbitrary Markdown, see [I want to parse arbitrary Markdown](https://github.com/njvack/markdown-to-json?tab=readme-ov-file#i-want-to-parse-arbitrary-markdown).
+
 ## Credits
 
 `markdown_to_json` was written by [Nate Vack](https://github.com/njvack) at the Center for Healthy Minds at the University of Wisconsin–Madison.
