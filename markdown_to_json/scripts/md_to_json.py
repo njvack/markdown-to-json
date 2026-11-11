@@ -52,12 +52,12 @@ def writable_io_or_stdout(filename: Optional[str]):
 def get_markdown_ast(markdown_file: str):
     """Parse AST"""
     # pylint: disable=bare-except
-    with open(markdown_file, "r", encoding="utf8") as file:
-        try:
+    try:
+        with open(markdown_file, "r", encoding="utf8") as file:
             return CommonMark.DocParser().parse(file.read())
-        except:
-            logging.error("Error: Can't open {0} for reading".format(markdown_file))
-            sys.exit(1)
+    except:
+        logging.error("Error: Can't open {0} for reading".format(markdown_file))
+        sys.exit(1)
 
 
 def jsonify_markdown(markdown_file: str, outfile: Optional[str], indent: int) -> int:

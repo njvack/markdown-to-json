@@ -114,9 +114,12 @@ def test_jsonify_markdown_empty_file(tmp_path):
     jsonify_markdown(str(input_md_path), str(output_json_path), 2)
 
 
-def test_jsonify_markdown_read_error(tmp_path):
+def test_jsonify_markdown_read_error(tmp_path, caplog):
     input_md_path = tmp_path / "nonexistent.md"
-    # File does not exist, intentionally causing a read error
+    # File does not exist, intentionally causing a read error;
+    # the CLI must report it cleanly instead of raising a traceback
 
-    with pytest.raises(FileNotFoundError):
+    with pytest.raises(SystemExit) as exc:
         jsonify_markdown(str(input_md_path), None, 2)
+    assert exc.value.code == 1
+    assert "Error: Can't open" in caplog.text
